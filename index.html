@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1e3a8a">
+<title>Absensi Guru Mugada</title>
+<style>
+:root{
+  --blue:#1e3a8a; --blue-dark:#172554; --blue-mid:#1e40af;
+  --blue-light:#dbeafe; --white:#fff; --gray:#64748b;
+  --gray-light:#f1f5f9; --gray-mid:#e2e8f0;
+  --red:#dc2626; --green:#16a34a; --yellow:#ca8a04; --purple:#7c3aed;
+  --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--gray-light);color:#1e293b;min-height:100vh;font-size:14px;line-height:1.5}
+img{max-width:100%}
+.hidden{display:none!important}
+.screen{min-height:100vh}
+header{background:var(--blue);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.header-inner{display:flex;align-items:center;gap:10px;padding:10px 14px;max-width:1200px;margin:0 auto}
+.header-inner h1{font-size:15px;font-weight:600;flex:1;line-height:1.2}
+.app-logo{width:32px;height:32px;border-radius:6px;object-fit:cover;background:#fff}
+.btn-light{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.btn-light:hover{background:rgba(255,255,255,.28)}
+.container{max-width:1200px;margin:0 auto;padding:12px;padding-bottom:80px}
+.card{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.card h2{font-size:14px;font-weight:600;color:var(--blue-dark);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--gray-mid)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stat-card{background:#fff;border-radius:var(--radius);padding:12px 8px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.05);border-top:3px solid var(--blue)}
+.stat-card .num{font-size:22px;font-weight:700;color:var(--blue-dark)}
+.stat-card .lbl{font-size:11px;color:var(--gray);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
+.stat-card.izin{border-top-color:var(--yellow)}
+.stat-card.sakit{border-top-color:var(--purple)}
+.stat-card.alpa{border-top-color:var(--red)}
+.list{list-style:none}
+.list li{padding:8px 0;border-bottom:1px solid var(--gray-light);font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.list li:last-child{border-bottom:none}
+.list .meta{font-size:11px;color:var(--gray)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.badge.hadir{background:#dcfce7;color:#166534}
+.badge.izin{background:#fef3c7;color:#92400e}
+.badge.sakit{background:#ede9fe;color:#5b21b6}
+.badge.alpa{background:#fee2e2;color:#991b1b}
+.badge.holiday{background:#dbeafe;color:#1e40af}
+.ranking li{counter-increment:rank;padding:8px 0}
+.ranking li .rk{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;background:var(--blue-light);color:var(--blue-dark);border-radius:50%;font-size:11px;font-weight:700;margin-right:8px}
+.ranking li:nth-child(1) .rk{background:#fbbf24;color:#78350f}
+.ranking li:nth-child(2) .rk{background:#cbd5e1;color:#334155}
+.ranking li:nth-child(3) .rk{background:#fcd34d;color:#78350f}
+.btn{display:inline-block;padding:10px 16px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-secondary{background:var(--gray-light);color:#334155;border:1px solid var(--gray-mid)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-success{background:var(--green);color:#fff}
+.btn-block{display:block;width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:5px 10px;font-size:11px}
+input[type=text],input[type=password],input[type=date],input[type=time],input[type=number],input[type=url],select,textarea{
+  width:100%;padding:9px 10px;border:1px solid var(--gray-mid);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:#1e293b
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,58,138,.1)}
+label{display:block;font-size:12px;font-weight:600;color:#475569;margin:10px 0 4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:480px){.form-row-3{grid-template-columns:1fr}}
+.tabs{display:flex;overflow-x:auto;background:var(--blue-mid);padding:0 4px;scrollbar-width:none;max-width:1200px;margin:0 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:none;border:none;color:rgba(255,255,255,.7);padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;font-family:inherit}
+.tabs button.active{color:#fff;border-bottom-color:#fbbf24}
+.tab-panel{padding-top:0}
+.table-scroll{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--gray-mid);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:12px;min-width:100%}
+table th,table td{padding:6px 8px;border:1px solid var(--gray-mid);text-align:left;white-space:nowrap}
+table th{background:var(--blue-light);color:var(--blue-dark);font-weight:600;font-size:11px;position:sticky;top:0}
+table td.cell-h{background:#dcfce7;color:#166534;font-weight:600}
+table td.cell-h2{background:#dbeafe;color:#1e40af;font-weight:600}
+table td.cell-a{background:#fee2e2;color:#991b1b;font-weight:700}
+table td.cell-s{background:#ede9fe;color:#5b21b6;font-weight:600}
+table td.cell-i{background:#fef3c7;color:#92400e;font-weight:600}
+table td.cell-l{background:#f1f5f9;color:#64748b;font-style:italic}
+.recap-table{font-size:10px}
+.recap-table th,.recap-table td{padding:2px 3px;font-size:9px}
+.recap-table .col-name{position:sticky;left:0;background:#fff;z-index:2;min-width:110px}
+.recap-table th.col-name{background:var(--blue-light);z-index:3}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:200}
+.modal-box{background:#fff;border-radius:var(--radius);padding:18px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal-box h3{font-size:15px;color:var(--blue-dark);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--gray-mid)}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn{flex:1}
+.days-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.days-grid label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:400;margin:0;padding:6px;background:var(--gray-light);border-radius:6px;cursor:pointer}
+.days-grid input{width:auto}
+.alert{padding:10px 12px;border-radius:6px;font-size:13px;margin-bottom:10px;display:flex;gap:8px;align-items:flex-start}
+.alert-info{background:var(--blue-light);color:var(--blue-dark);border-left:4px solid var(--blue)}
+.alert-warn{background:#fef3c7;color:#92400e;border-left:4px solid var(--yellow)}
+.alert-error{background:#fee2e2;color:#991b1b;border-left:4px solid var(--red)}
+.alert-success{background:#dcfce7;color:#166534;border-left:4px solid var(--green)}
+.empty{text-align:center;color:var(--gray);font-size:13px;padding:20px;font-style:italic}
+.login-box{max-width:400px;margin:40px auto;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.login-box h2{color:var(--blue-dark);text-align:center;margin-bottom:4px;font-size:18px;border:none;padding:0}
+.login-box p{text-align:center;color:var(--gray);font-size:12px;margin-bottom:20px}
+.login-logo{display:block;width:64px;height:64px;margin:0 auto 12px;border-radius:12px;object-fit:cover;background:var(--blue-light)}
+.guru-hero{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.guru-hero h2{color:#fff;border:none;padding:0;font-size:15px;margin-bottom:4px}
+.guru-hero .big{font-size:36px;font-weight:700;line-height:1}
+.guru-hero .rank{font-size:13px;opacity:.9;margin-top:6px}
+.guru-hero .row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}
+.absen-btn{font-size:16px;padding:16px;font-weight:700;letter-spacing:.5px;box-shadow:0 4px 10px rgba(30,58,138,.3)}
+.small{font-size:11px;color:var(--gray)}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.header-inner h1{font-size:13px}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ========== DASHBOARD PUBLIK ========== -->
+  <div id="screen-dashboard" class="screen">
+    <header>
+      <div class="header-inner">
+        <img id="dashLogo" class="app-logo" src="" alt="logo" style="display:none">
+        <h1>Absensi Guru Mugada</h1>
+        <button class="btn-light" onclick="showScreen('login')">Login</button>
+      </div>
+    </header>
+    <div class="container">
+      <div id="holidayBanner"></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="num" id="statHadir">0</div><div class="lbl">Hadir</div></div>
+        <div class="stat-card izin"><div class="num" id="statIzin">0</div><div class="lbl">Izin</div></div>
+        <div class="stat-card sakit"><div class="num" id="statSakit">0</div><div class="lbl">Sakit</div></div>
+        <div class="stat-card alpa"><div class="num" id="statAlpa">0</div><div class="lbl">Belum Absen</div></div>
+      </div>
+      <div class="card">
+        <h2>Guru Bertugas Hari Ini</h2>
+        <ul id="listBertugas" class="list"><li class="empty">Memuat...</li></ul>
+      </div>
+      <div class="card">
+        <h2>Riwayat Absensi Hari Ini</h2>
+        <ul id="listRiwayat" class="list"><li class="empty">Memuat...</li></ul>
+      </div>
+      <div class="card">
+        <h2>Peringkat Guru Bulan Ini</h2>
+        <ol id="listRanking" class="list ranking"><li class="empty">Memuat...</li></ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== LOGIN ========== -->
+  <div id="screen-login" class="screen hidden">
+    <header>
+      <div class="header-inner">
+        <h1>Login · Absensi Guru Mugada</h1>
+        <button class="btn-light" onclick="showScreen('dashboard')">Beranda</button>
+      </div>
+    </header>
+    <div class="container">
+      <div class="login-box" id="loginBox">
+        <img id="loginLogo" class="login-logo" src="" alt="logo" style="display:none">
+        <h2>Masuk Aplikasi</h2>
+        <p>Gunakan username & password yang diberikan admin</p>
+        <div id="loginError"></div>
+        <label>Username</label>
+        <input type="text" id="loginUser" autocomplete="username">
+        <label>Password</label>
+        <input type="password" id="loginPass" autocomplete="current-password">
+        <button class="btn btn-primary btn-block" style="margin-top:16px" onclick="doLogin()">Masuk</button>
+        <div id="bootstrapAdmin" class="hidden" style="margin-top:16px">
+          <div class="alert alert-warn">Belum ada akun. Buat admin pertama:</div>
+          <label>Nama Admin</label>
+          <input type="text" id="bootNama">
+          <label>Username</label>
+          <input type="text" id="bootUser">
+          <label>Password</label>
+          <input type="password" id="bootPass">
+          <button class="btn btn-success btn-block" style="margin-top:12px" onclick="createFirstAdmin()">Buat Admin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== GURU ========== -->
+  <div id="screen-guru" class="screen hidden">
+    <header>
+      <div class="header-inner">
+        <img id="guruLogo" class="app-logo" src="" alt="logo" style="display:none">
+        <h1 id="guruHeaderTitle">Absensi Guru</h1>
+        <button class="btn-light" onclick="logout()">Keluar</button>
+      </div>
+      <nav class="tabs" id="guruTabs">
+        <button data-tab="home" class="active" onclick="switchGuruTab('home')">Beranda</button>
+        <button data-tab="riwayat" onclick="switchGuruTab('riwayat')">Riwayat</button>
+        <button data-tab="izin" onclick="switchGuruTab('izin')">Izin / Sakit</button>
+      </nav>
+    </header>
+    <div class="container">
+      <div id="guruTab-home" class="tab-panel"></div>
+      <div id="guruTab-riwayat" class="tab-panel hidden"></div>
+      <div id="guruTab-izin" class="tab-panel hidden"></div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN ========== -->
+  <div id="screen-admin" class="screen hidden">
+    <header>
+      <div class="header-inner">
+        <img id="adminLogo" class="app-logo" src="" alt="logo" style="display:none">
+        <h1>Admin · Absensi Guru Mugada</h1>
+        <button class="btn-light" onclick="logout()">Keluar</button>
+      </div>
+      <nav class="tabs" id="adminTabs">
+        <button data-tab="guru" class="active" onclick="switchAdminTab('guru')">Data Guru</button>
+        <button data-tab="libur" onclick="switchAdminTab('libur')">Hari Libur</button>
+        <button data-tab="riwayat" onclick="switchAdminTab('riwayat')">Riwayat</button>
+        <button data-tab="rekap-rentang" onclick="switchAdminTab('rekap-rentang')">Rekap Rentang</button>
+        <button data-tab="rekap-bulanan" onclick="switchAdminTab('rekap-bulanan')">Rekap Bulanan</button>
+        <button data-tab="pengaturan" onclick="switchAdminTab('pengaturan')">Pengaturan</button>
+      </nav>
+    </header>
+    <div class="container">
+      <div id="adminTab-guru" class="tab-panel"></div>
+      <div id="adminTab-libur" class="tab-panel hidden"></div>
+      <div id="adminTab-riwayat" class="tab-panel hidden"></div>
+      <div id="adminTab-rekap-rentang" class="tab-panel hidden"></div>
+      <div id="adminTab-rekap-bulanan" class="tab-panel hidden"></div>
+      <div id="adminTab-pengaturan" class="tab-panel hidden"></div>
+    </div>
+  </div>
+
+  <!-- Modal Guru -->
+  <div id="modalGuru" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="modalGuruTitle">Tambah Guru</h3>
+      <input type="hidden" id="mgId">
+      <label>Nama Lengkap</label>
+      <input type="text" id="mgNama">
+      <label>Username</label>
+      <input type="text" id="mgUser">
+      <label>Password</label>
+      <input type="text" id="mgPass">
+      <label>Role</label>
+      <select id="mgRole">
+        <option value="guru">Guru</option>
+        <option value="admin">Admin</option>
+      </select>
+      <label>Hari Tugas</label>
+      <div class="days-grid" id="mgDays"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('modalGuru')">Batal</button>
+        <button class="btn btn-primary" onclick="saveGuru()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+/* ============================================================
+   GANTI firebaseConfig DENGAN MILIKMU DARI FIREBASE CONSOLE
+   ============================================================ */
+const firebaseConfig = {
+    apiKey: "AIzaSyD7muNeK6B495IxfRxuLUaZ1-rd_-4suyg",
+  authDomain: "absen-guru-5.firebaseapp.com",
+  projectId: "absen-guru-5",
+  storageBucket: "absen-guru-5.firebasestorage.app",
+  messagingSenderId: "756001452434",
+  appId: "1:756001452434:web:05c72106460f2e814a514b"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* ==================== STATE ==================== */
+const S = {
+  user:null, config:{}, users:{}, attendance:{},
+  screen:'dashboard', guruTab:'home', adminTab:'guru'
+};
+
+/* ==================== UTILS ==================== */
+const pad = n => String(n).padStart(2,'0');
+const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayStr = (d=new Date()) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const nowTime = () => { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const MONTHS = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DAYS = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const fmtDate = s => { if(!s) return '-'; const [y,m,d]=s.split('-'); return `${+d} ${MONTHS[+m-1]} ${y}`; };
+const fmtTime = t => t || '-';
+
+function isHoliday(dateStr, dow, config){
+  const weekly = config.weeklyOff || [];
+  if (weekly.includes(dow)) return true;
+  const custom = config.customHolidays || {};
+  if (custom[dateStr]) return true;
+  return false;
+}
+function holidayReason(dateStr, dow, config){
+  const weekly = config.weeklyOff || [];
+  const custom = config.customHolidays || {};
+  if (custom[dateStr]) return 'Libur: ' + custom[dateStr];
+  if (weekly.includes(dow)) return 'Libur mingguan (' + DAYS[dow] + ')';
+  return null;
+}
+function distanceM(lat1,lon1,lat2,lon2){
+  const R=6371000; const dLat=(lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+/* ==================== FIREBASE LISTENERS ==================== */
+db.ref('config').on('value', s => { S.config = s.val() || {}; applyLogo(); rerender(); });
+db.ref('users').on('value', s => {
+  S.users = s.val() || {};
+  const hasUsers = Object.keys(S.users).length > 0;
+  const boot = document.getElementById('bootstrapAdmin');
+  if (boot) boot.classList.toggle('hidden', hasUsers);
+  // validasi session
+  if (S.user && !S.users[S.user.uid]) { logout(); return; }
+  if (S.user) S.user = { ...S.users[S.user.uid], uid: S.user.uid };
+  rerender();
+});
+db.ref('attendance').on('value', s => { S.attendance = s.val() || {}; rerender(); });
+
+/* ==================== LOGO ==================== */
+function applyLogo(){
+  const url = S.config.logo || '';
+  ['dashLogo','loginLogo','guruLogo','adminLogo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (url) { el.src = url; el.style.display='block'; }
+    else el.style.display='none';
+  });
+}
+
+/* ==================== ROUTING ==================== */
+function showScreen(name){
+  ['dashboard','login','guru','admin'].forEach(n => {
+    document.getElementById('screen-'+n).classList.toggle('hidden', n!==name);
+  });
+  S.screen = name;
+  window.scrollTo(0,0);
+  rerender();
+}
+function switchGuruTab(tab){
+  S.guruTab = tab;
+  document.querySelectorAll('#guruTabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  ['home','riwayat','izin'].forEach(t=>document.getElementById('guruTab-'+t).classList.toggle('hidden',t!==tab));
+  renderGuruTab();
+}
+function switchAdminTab(tab){
+  S.adminTab = tab;
+  document.querySelectorAll('#adminTabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  ['guru','libur','riwayat','rekap-rentang','rekap-bulanan','pengaturan'].forEach(t=>document.getElementById('adminTab-'+t).classList.toggle('hidden',t!==tab));
+  renderAdminTab();
+}
+function rerender(){
+  if (S.screen==='dashboard') renderDashboard();
+  else if (S.screen==='guru') renderGuruTab();
+  else if (S.screen==='admin') renderAdminTab();
+}
+
+/* ==================== LOGIN ==================== */
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  err.innerHTML = '';
+  const entry = Object.entries(S.users).find(([id,usr]) => usr.username === u && usr.password === p);
+  if (!entry){ err.innerHTML = '<div class="alert alert-error">Username atau password salah.</div>'; return; }
+  const [uid, usr] = entry;
+  S.user = { ...usr, uid };
+  localStorage.setItem('absenUser', JSON.stringify({uid}));
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  if (usr.role === 'admin') showScreen('admin');
+  else showScreen('guru');
+}
+function logout(){
+  S.user = null;
+  localStorage.removeItem('absenUser');
+  showScreen('dashboard');
+}
+function restoreSession(){
+  try {
+    const s = JSON.parse(localStorage.getItem('absenUser')||'null');
+    if (s && s.uid && S.users[s.uid]){
+      S.user = { ...S.users[s.uid], uid: s.uid };
+      showScreen(S.user.role === 'admin' ? 'admin' : 'guru');
+    }
+  } catch(e){}
+}
+function createFirstAdmin(){
+  const nama = document.getElementById('bootNama').value.trim();
+  const user = document.getElementById('bootUser').value.trim();
+  const pass = document.getElementById('bootPass').value;
+  if (!nama || !user || !pass){ alert('Lengkapi semua data'); return; }
+  if (Object.keys(S.users).length>0){ alert('Sudah ada akun'); return; }
+  db.ref('users').push({
+    nama, username:user, password:pass, role:'admin', dutyDays:[], aktif:true
+  }).then(()=>alert('Admin berhasil dibuat. Silakan login.'));
+}
+
+/* ==================== DASHBOARD ==================== */
+function renderDashboard(){
+  const today = new Date();
+  const dateStr = todayStr();
+  const dow = today.getDay();
+  const off = isHoliday(dateStr, dow, S.config);
+  const reason = holidayReason(dateStr, dow, S.config);
+
+  // Banner hari libur
+  const banner = document.getElementById('holidayBanner');
+  banner.innerHTML = off
+    ? `<div class="alert alert-info"><strong>Hari Libur.</strong> ${esc(reason||'')}. Absensi diliburkan.</div>`
+    : '';
+
+  // Statistik hari ini
+  const todayAtt = S.attendance[dateStr] || {};
+  let hadir=0, izin=0, sakit=0;
+  Object.values(todayAtt).forEach(a=>{ if(a.type==='hadir')hadir++; else if(a.type==='izin')izin++; else if(a.type==='sakit')sakit++; });
+  let belum = 0;
+  if (!off){
+    Object.entries(S.users).forEach(([uid,u])=>{
+      if (u.role!=='guru') return;
+      if (!(u.dutyDays||[]).includes(dow)) return;
+      if (!todayAtt[uid]) belum++;
+    });
+  }
+  document.getElementById('statHadir').textContent = hadir;
+  document.getElementById('statIzin').textContent = izin;
+  document.getElementById('statSakit').textContent = sakit;
+  document.getElementById('statAlpa').textContent = belum;
+
+  // Guru bertugas hari ini
+  const bertugas = off ? [] : Object.entries(S.users).filter(([uid,u]) => u.role==='guru' && (u.dutyDays||[]).includes(dow));
+  const elBertugas = document.getElementById('listBertugas');
+  if (off){ elBertugas.innerHTML = '<li class="empty">Hari libur — tidak ada guru bertugas.</li>'; }
+  else if (!bertugas.length){ elBertugas.innerHTML = '<li class="empty">Tidak ada guru terjadwal hari ini.</li>'; }
+  else {
+    elBertugas.innerHTML = bertugas.map(([uid,u])=>{
+      const a = todayAtt[uid];
+      const st = a ? `<span class="badge ${a.type}">${a.type.toUpperCase()}</span>` : '<span class="badge alpa">Belum</span>';
+      return `<li><span>${esc(u.nama)}</span>${st}</li>`;
+    }).join('');
+  }
+
+  // Riwayat hari ini
+  const entries = Object.entries(todayAtt).sort((a,b)=>(b[1].timestamp||0)-(a[1].timestamp||0));
+  const elRiwayat = document.getElementById('listRiwayat');
+  if (!entries.length) elRiwayat.innerHTML = '<li class="empty">Belum ada absensi hari ini.</li>';
+  else elRiwayat.innerHTML = entries.map(([uid,a])=>{
+    const nm = S.users[uid]?.nama || a.nama || 'Guru';
+    let ket = '';
+    if (a.type==='hadir') ket = `Hadir · ${a.time}`;
+    else ket = `${a.type==='izin'?'Izin':'Sakit'}${a.reason?' · '+esc(a.reason):''}`;
+    return `<li><div><div>${esc(nm)}</div><div class="meta">${ket}</div></div><span class="badge ${a.type}">${a.type.toUpperCase()}</span></li>`;
+  }).join('');
+
+  // Peringkat
+  const ranking = calcRanking(new Date().getFullYear(), new Date().getMonth()+1);
+  const elRank = document.getElementById('listRanking');
+  if (!ranking.length) elRank.innerHTML = '<li class="empty">Belum ada data guru.</li>';
+  else elRank.innerHTML = ranking.map(r=>{
+    const avg = r.avgArrival < 9999 ? minutesToTime(r.avgArrival) : '-';
+    return `<li><div><span class="rk">${r.pos}</span><strong>${esc(r.nama)}</strong><div class="meta">Rata-rata datang: ${avg} · Hadir ${r.attended}/${r.dutyTotal} hari tugas</div></div><span class="badge hadir">${r.pct.toFixed(1)}%</span></li>`;
+  }).join('');
+}
+
+function minutesToTime(m){ m=Math.round(m); return `${pad(Math.floor(m/60))}:${pad(m%60)}`; }
+
+/* ==================== RANKING ==================== */
+function calcRanking(year, month){
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const now = new Date();
+  const isCurrent = (year===now.getFullYear() && month===now.getMonth()+1);
+  const todayD = now.getDate();
+  const res = [];
+  Object.entries(S.users).forEach(([uid,u])=>{
+    if (u.role!=='guru') return;
+    const dutyDays = u.dutyDays || [];
+    let dutyTotal=0, attended=0, totalArr=0, arrCount=0;
+    for (let d=1; d<=daysInMonth; d++){
+      if (isCurrent && d>todayD) continue;
+      const dateStr = `${year}-${pad(month)}-${pad(d)}`;
+      const date = new Date(year, month-1, d);
+      const dow = date.getDay();
+      if (isHoliday(dateStr, dow, S.config)) continue;
+      if (!dutyDays.includes(dow)) continue;
+      dutyTotal++;
+      const a = (S.attendance[dateStr]||{})[uid];
+      if (a && a.type==='hadir'){
+        attended++;
+        const [hh,mm]=a.time.split(':').map(Number);
+        totalArr += hh*60+mm; arrCount++;
+      }
+    }
+    const pct = dutyTotal>0 ? (attended/dutyTotal*100) : 0;
+    const avgArr = arrCount>0 ? totalArr/arrCount : 9999;
+    res.push({ uid, nama:u.nama, pct, attended, dutyTotal, avgArrival:avgArr });
+  });
+  res.sort((a,b)=> b.pct!==a.pct ? b.pct-a.pct : a.avgArrival-b.avgArrival);
+  res.forEach((r,i)=>r.pos=i+1);
+  return res;
+}
+
+/* ==================== GURU AREA ==================== */
+function renderGuruTab(){
+  if (!S.user) return;
+  document.getElementById('guruHeaderTitle').textContent = 'Halo, ' + (S.user.nama||'Guru');
+  if (S.guruTab==='home') renderGuruHome();
+  else if (S.guruTab==='riwayat') renderGuruRiwayat();
+  else renderGuruIzin();
+}
+
+function renderGuruHome(){
+  const el = document.getElementById('guruTab-home');
+  const now = new Date();
+  const dateStr = todayStr();
+  const dow = now.getDay();
+  const off = isHoliday(dateStr, dow, S.config);
+  const offReason = holidayReason(dateStr, dow, S.config);
+  const ranking = calcRanking(now.getFullYear(), now.getMonth()+1);
+  const me = ranking.find(r=>r.uid===S.user.uid) || { pct:0, pos:'-', attended:0, dutyTotal:0, avgArrival:9999 };
+  const todayAtt = (S.attendance[dateStr]||{})[S.user.uid];
+  const closeTime = S.config.closeTime || '08:00';
+  const isClosed = nowTime() > closeTime;
+
+  let absenZone = '';
+  if (off){
+    absenZone = `<div class="alert alert-info">Hari ini libur (${esc(offReason||'')}). Absensi dikunci.</div>`;
+  } else if (todayAtt){
+    let ket = todayAtt.type==='hadir' ? `Hadir pukul ${todayAtt.time}` : `${todayAtt.type==='izin'?'Izin':'Sakit'}${todayAtt.reason?' · '+esc(todayAtt.reason):''}`;
+    absenZone = `<div class="alert alert-success">Absensi hari ini sudah tercatat: <strong>${ket}</strong>.</div>`;
+  } else if (isClosed){
+    absenZone = `<div class="alert alert-error">Batas absen (${closeTime}) telah lewat. Absensi dikunci.</div>`;
+  } else {
+    absenZone = `<button class="btn btn-primary btn-block absen-btn" onclick="takeAttendance()">ABSEN MASUK SEKARANG</button>
+                 <div class="small" style="text-align:center;margin-top:6px">Batas absen pukul ${closeTime} · Radius ${S.config.radius||100}m</div>`;
+  }
+
+  el.innerHTML = `
+    <div class="guru-hero">
+      <h2>Kehadiran Bulan Ini</h2>
+      <div class="big">${me.pct.toFixed(1)}%</div>
+      <div class="rank">Peringkat ${me.pos} dari ${ranking.length} guru</div>
+      <div class="row">
+        <div><div class="small" style="color:#cbd5e1">Hadir</div><div><strong>${me.attended}/${me.dutyTotal}</strong> hari tugas</div></div>
+        <div style="text-align:right"><div class="small" style="color:#cbd5e1">Rata-rata datang</div><div><strong>${me.avgArrival<9999?minutesToTime(me.avgArrival):'-'}</strong></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Absensi Hari Ini · ${fmtDate(dateStr)}</h2>
+      ${absenZone}
+      <div id="absenStatus" class="small" style="text-align:center;margin-top:8px"></div>
+    </div>`;
+}
+
+function takeAttendance(){
+  const status = document.getElementById('absenStatus');
+  if (!navigator.geolocation){ status.innerHTML = '<div class="alert alert-error">Browser tidak mendukung GPS.</div>'; return; }
+  const cfg = S.config;
+  if (!cfg.lat || !cfg.lng){ status.innerHTML = '<div class="alert alert-error">Admin belum mengatur lokasi absensi.</div>'; return; }
+  status.innerHTML = '<div class="alert alert-info">Mendeteksi lokasi...</div>';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const { latitude, longitude } = pos.coords;
+    const dist = distanceM(latitude, longitude, cfg.lat, cfg.lng);
+    const radius = cfg.radius || 100;
+    if (dist > radius){
+      status.innerHTML = `<div class="alert alert-error">Anda berada di luar radius. Jarak: ${Math.round(dist)}m (maks ${radius}m).</div>`;
+      return;
+    }
+    const dateStr = todayStr();
+    const ref = db.ref(`attendance/${dateStr}/${S.user.uid}`);
+    ref.once('value').then(snap=>{
+      if (snap.exists()){ status.innerHTML = '<div class="alert alert-warn">Anda sudah absen hari ini.</div>'; return; }
+      ref.set({
+        type:'hadir', time:nowTime(), timestamp:Date.now(), nama:S.user.nama
+      }).then(()=>{
+        status.innerHTML = '<div class="alert alert-success">Absensi berhasil dicatat.</div>';
+      }).catch(err=>{
+        status.innerHTML = '<div class="alert alert-error">Gagal: '+esc(err.message)+'</div>';
+      });
+    });
+  }, err=>{
+    status.innerHTML = '<div class="alert alert-error">Gagal ambil lokasi: '+esc(err.message)+'</div>';
+  }, { enableHighAccuracy:true, timeout:15000, maximumAge:0 });
+}
+
+function renderGuruRiwayat(){
+  const el = document.getElementById('guruTab-riwayat');
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth()+1;
+  const daysInMonth = new Date(y,m,0).getDate();
+  const rows = [];
+  for (let d=daysInMonth; d>=1; d--){
+    const dateStr = `${y}-${pad(m)}-${pad(d)}`;
+    const date = new Date(y,m-1,d);
+    const off = isHoliday(dateStr, date.getDay(), S.config);
+    if (off) continue;
+    const a = (S.attendance[dateStr]||{})[S.user.uid];
+    if (!a) continue;
+    rows.push({ dateStr, a });
+  }
+  el.innerHTML = `
+    <div class="card">
+      <h2>Riwayat Absensi · ${MONTHS[m-1]} ${y}</h2>
+      ${rows.length ? `<ul class="list">${rows.map(r=>{
+        let ket = r.a.type==='hadir' ? `Hadir pukul ${r.a.time}` : `${r.a.type==='izin'?'Izin':'Sakit'}${r.a.reason?' · '+esc(r.a.reason):''}`;
+        return `<li><div><div>${fmtDate(r.dateStr)}</div><div class="meta">${ket}</div></div><span class="badge ${r.a.type}">${r.a.type.toUpperCase()}</span></li>`;
+      }).join('')}</ul>` : '<div class="empty">Belum ada riwayat bulan ini.</div>'}
+    </div>`;
+}
+
+function renderGuruIzin(){
+  const el = document.getElementById('guruTab-izin');
+  const dateStr = todayStr();
+  const now = new Date();
+  const off = isHoliday(dateStr, now.getDay(), S.config);
+  const existing = (S.attendance[dateStr]||{})[S.user.uid];
+  let content = '';
+  if (off) content = '<div class="alert alert-info">Hari ini libur. Tidak perlu mengajukan izin.</div>';
+  else if (existing) content = `<div class="alert alert-warn">Anda sudah tercatat hari ini (${existing.type}).</div>`;
+  else content = `
+    <label>Jenis</label>
+    <select id="izinType">
+      <option value="izin">Izin</option>
+      <option value="sakit">Sakit</option>
+    </select>
+    <label>Alasan / Keterangan</label>
+    <textarea id="izinReason" rows="3" placeholder="Contoh: Demam, keperluan keluarga..."></textarea>
+    <button class="btn btn-primary btn-block" style="margin-top:12px" onclick="submitIzin()">Kirim Pengajuan</button>
+    <div id="izinStatus" style="margin-top:10px"></div>`;
+  el.innerHTML = `<div class="card"><h2>Izin / Sakit · ${fmtDate(dateStr)}</h2>${content}</div>`;
+}
+
+function submitIzin(){
+  const type = document.getElementById('izinType').value;
+  const reason = document.getElementById('izinReason').value.trim();
+  const status = document.getElementById('izinStatus');
+  if (!reason){ status.innerHTML = '<div class="alert alert-error">Alasan wajib diisi.</div>'; return; }
+  db.ref(`attendance/${todayStr()}/${S.user.uid}`).set({
+    type, reason, timestamp:Date.now(), nama:S.user.nama
+  }).then(()=>{
+    status.innerHTML = '<div class="alert alert-success">Pengajuan terkirim.</div>';
+  }).catch(err=>{
+    status.innerHTML = '<div class="alert alert-error">Gagal: '+esc(err.message)+'</div>';
+  });
+}
+
+/* ==================== ADMIN AREA ==================== */
+function renderAdminTab(){
+  if (S.adminTab==='guru') renderAdminGuru();
+  else if (S.adminTab==='libur') renderAdminLibur();
+  else if (S.adminTab==='riwayat') renderAdminRiwayat();
+  else if (S.adminTab==='rekap-rentang') renderAdminRekapRentang();
+  else if (S.adminTab==='rekap-bulanan') renderAdminRekapBulanan();
+  else if (S.adminTab==='pengaturan') renderAdminPengaturan();
+}
+
+/* --- Data Guru --- */
+function renderAdminGuru(){
+  const el = document.getElementById('adminTab-guru');
+  const list = Object.entries(S.users).sort((a,b)=>(a[1].nama||'').localeCompare(b[1].nama||''));
+  el.innerHTML = `
+    <div class="card">
+      <h2>Data Guru & Admin (${list.length})</h2>
+      <button class="btn btn-primary btn-block" onclick="openGuruModal()" style="margin-bottom:10px">+ Tambah Guru</button>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Nama</th><th>Username</th><th>Role</th><th>Hari Tugas</th><th>Aksi</th></tr></thead>
+          <tbody>
+            ${list.length ? list.map(([uid,u])=>`
+              <tr>
+                <td>${esc(u.nama)}</td>
+                <td>${esc(u.username)}</td>
+                <td>${esc(u.role)}</td>
+                <td>${(u.dutyDays||[]).sort().map(d=>DAYS[d].slice(0,3)).join(', ')||'-'}</td>
+                <td>
+                  <button class="btn btn-secondary btn-sm" onclick="openGuruModal('${uid}')">Edit</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteGuru('${uid}')">Hapus</button>
+                </td>
+              </tr>`).join('') : '<tr><td colspan="5" class="empty">Belum ada data.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function openGuruModal(uid){
+  document.getElementById('modalGuruTitle').textContent = uid ? 'Edit Guru' : 'Tambah Guru';
+  document.getElementById('mgId').value = uid || '';
+  const u = uid ? S.users[uid] : { nama:'', username:'', password:'', role:'guru', dutyDays:[] };
+  document.getElementById('mgNama').value = u.nama || '';
+  document.getElementById('mgUser').value = u.username || '';
+  document.getElementById('mgPass').value = u.password || '';
+  document.getElementById('mgRole').value = u.role || 'guru';
+  // render days
+  const order = [1,2,3,4,5,6,0];
+  document.getElementById('mgDays').innerHTML = order.map(d=>`
+    <label><input type="checkbox" value="${d}" ${(u.dutyDays||[]).includes(d)?'checked':''}> ${DAYS[d].slice(0,3)}</label>
+  `).join('');
+  document.getElementById('modalGuru').classList.remove('hidden');
+}
+
+function closeModal(id){ document.getElementById(id).classList.add('hidden'); }
+
+function saveGuru(){
+  const uid = document.getElementById('mgId').value;
+  const data = {
+    nama: document.getElementById('mgNama').value.trim(),
+    username: document.getElementById('mgUser').value.trim(),
+    password: document.getElementById('mgPass').value,
+    role: document.getElementById('mgRole').value,
+    dutyDays: [...document.querySelectorAll('#mgDays input:checked')].map(c=>+c.value),
+    aktif: true
+  };
+  if (!data.nama || !data.username || !data.password){ alert('Lengkapi nama, username, password'); return; }
+  if (uid) db.ref('users/'+uid).update(data).then(()=>closeModal('modalGuru'));
+  else db.ref('users').push(data).then(()=>closeModal('modalGuru'));
+}
+
+function deleteGuru(uid){
+  if (!confirm('Hapus user ini?')) return;
+  db.ref('users/'+uid).remove();
+}
+
+/* --- Libur --- */
+function renderAdminLibur(){
+  const el = document.getElementById('adminTab-libur');
+  const weekly = S.config.weeklyOff || [];
+  const custom = S.config.customHolidays || {};
+  const order = [0,1,2,3,4,5,6];
+  el.innerHTML = `
+    <div class="card">
+      <h2>Hari Libur Mingguan</h2>
+      <div class="days-grid">
+        ${order.map(d=>`<label><input type="checkbox" data-day="${d}" ${weekly.includes(d)?'checked':''}> ${DAYS[d]}</label>`).join('')}
+      </div>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="saveWeeklyOff()">Simpan Libur Mingguan</button>
+    </div>
+    <div class="card">
+      <h2>Hari Libur Kustom</h2>
+      <div class="form-row">
+        <div><label>Tanggal</label><input type="date" id="holDate"></div>
+        <div><label>Keterangan</label><input type="text" id="holName" placeholder="Natal, Tahun Baru..."></div>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="addCustomHoliday()">+ Tambah</button>
+      <ul class="list" style="margin-top:12px">
+        ${Object.keys(custom).length ? Object.entries(custom).sort().map(([d,n])=>`
+          <li><div><strong>${fmtDate(d)}</strong><div class="meta">${esc(n)}</div></div>
+              <button class="btn btn-danger btn-sm" onclick="delCustomHoliday('${d}')">Hapus</button></li>`).join('')
+          : '<li class="empty">Belum ada hari libur kustom.</li>'}
+      </ul>
+    </div>`;
+}
+function saveWeeklyOff(){
+  const days = [...document.querySelectorAll('#adminTab-libur input[data-day]:checked')].map(c=>+c.dataset.day);
+  db.ref('config/weeklyOff').set(days);
+}
+function addCustomHoliday(){
+  const date = document.getElementById('holDate').value;
+  const name = document.getElementById('holName').value.trim();
+  if (!date || !name){ alert('Isi tanggal dan keterangan'); return; }
+  db.ref('config/customHolidays/'+date).set(name);
+}
+function delCustomHoliday(date){
+  db.ref('config/customHolidays/'+date).remove();
+}
+
+/* --- Riwayat per tanggal --- */
+function renderAdminRiwayat(){
+  const el = document.getElementById('adminTab-riwayat');
+  const cur = el.dataset.date || todayStr();
+  el.dataset.date = cur;
+  const date = new Date(cur+'T00:00:00');
+  const off = isHoliday(cur, date.getDay(), S.config);
+  const att = S.attendance[cur] || {};
+  el.innerHTML = `
+    <div class="card">
+      <h2>Riwayat Absensi per Tanggal</h2>
+      <label>Pilih Tanggal</label>
+      <input type="date" value="${cur}" onchange="document.getElementById('adminTab-riwayat').dataset.date=this.value;renderAdminRiwayat()">
+      ${off ? '<div class="alert alert-info" style="margin-top:10px">Tanggal ini hari libur.</div>' : ''}
+      <div class="table-scroll" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Nama</th><th>Status</th><th>Waktu</th><th>Alasan</th></tr></thead>
+          <tbody>
+            ${Object.entries(att).length ? Object.entries(att).map(([uid,a])=>{
+              const nm = S.users[uid]?.nama || a.nama || uid;
+              return `<tr><td>${esc(nm)}</td><td><span class="badge ${a.type}">${a.type.toUpperCase()}</span></td><td>${fmtTime(a.time)}</td><td>${esc(a.reason||'-')}</td></tr>`;
+            }).join('') : '<tr><td colspan="4" class="empty">Tidak ada absensi pada tanggal ini.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+/* --- Rekap Rentang --- */
+function renderAdminRekapRentang(){
+  const el = document.getElementById('adminTab-rekap-rentang');
+  const start = el.dataset.start || todayStr();
+  const end = el.dataset.end || todayStr();
+  el.dataset.start = start; el.dataset.end = end;
+  const rows = buildRangeRecap(start, end);
+  el.innerHTML = `
+    <div class="card">
+      <h2>Rekap Absensi (Rentang Tanggal)</h2>
+      <div class="form-row">
+        <div><label>Dari</label><input type="date" value="${start}" onchange="document.getElementById('adminTab-rekap-rentang').dataset.start=this.value;renderAdminRekapRentang()"></div>
+        <div><label>Sampai</label><input type="date" value="${end}" onchange="document.getElementById('adminTab-rekap-rentang').dataset.end=this.value;renderAdminRekapRentang()"></div>
+      </div>
+      <div class="small" style="margin-top:8px">Hari libur mingguan & kustom tidak diikutkan. Total baris: ${rows.length}</div>
+      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="downloadRangePDF()">⬇ Download PDF</button>
+      <div class="table-scroll" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Nama</th><th>Status</th><th>Waktu</th><th>Alasan</th></tr></thead>
+          <tbody>
+            ${rows.length ? rows.map(r=>`<tr><td>${fmtDate(r.date)}</td><td>${esc(r.nama)}</td><td><span class="badge ${r.type}">${r.type.toUpperCase()}</span></td><td>${fmtTime(r.time)}</td><td>${esc(r.reason||'-')}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Tidak ada data pada rentang ini.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function buildRangeRecap(start, end){
+  const rows = [];
+  const s = new Date(start+'T00:00:00');
+  const e = new Date(end+'T00:00:00');
+  for (let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
+    const ds = todayStr(d);
+    if (isHoliday(ds, d.getDay(), S.config)) continue;
+    const att = S.attendance[ds] || {};
+    Object.entries(att).forEach(([uid,a])=>{
+      const nm = S.users[uid]?.nama || a.nama || uid;
+      rows.push({ date: ds, nama: nm, type: a.type, time: a.time, reason: a.reason });
+    });
+  }
+  rows.sort((a,b)=> a.date.localeCompare(b.date) || a.nama.localeCompare(b.nama));
+  return rows;
+}
+
+function downloadRangePDF(){
+  const start = document.getElementById('adminTab-rekap-rentang').dataset.start;
+  const end = document.getElementById('adminTab-rekap-rentang').dataset.end;
+  const rows = buildRangeRecap(start, end);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  doc.setFontSize(12);
+  doc.text('Rekap Absensi Guru Mugada', 14, 14);
+  doc.setFontSize(9);
+  doc.text(`Rentang: ${fmtDate(start)} s.d ${fmtDate(end)}`, 14, 20);
+  doc.text('Hari libur tidak diikutkan dalam rekap.', 14, 25);
+  doc.autoTable({
+    head: [['Tanggal','Nama','Status','Waktu','Alasan']],
+    body: rows.map(r=>[fmtDate(r.date), r.nama, r.type.toUpperCase(), r.time||'-', r.reason||'-']),
+    startY: 30,
+    styles:{ fontSize:8, cellPadding:1.5 },
+    headStyles:{ fillColor:[30,58,138] }
+  });
+  doc.save(`Rekap_${start}_sd_${end}.pdf`);
+}
+
+/* --- Rekap Bulanan --- */
+function renderAdminRekapBulanan(){
+  const el = document.getElementById('adminTab-rekap-bulanan');
+  const now = new Date();
+  const y = +(el.dataset.year || now.getFullYear());
+  const m = +(el.dataset.month || now.getMonth()+1);
+  el.dataset.year = y; el.dataset.month = m;
+  const data = buildMonthlyRecap(y, m);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const dayCols = Array.from({length:daysInMonth},(_,i)=>i+1);
+  el.innerHTML = `
+    <div class="card">
+      <h2>Rekap Bulanan · ${MONTHS[m-1]} ${y}</h2>
+      <div class="form-row">
+        <div><label>Bulan</label>
+          <select onchange="document.getElementById('adminTab-rekap-bulanan').dataset.month=this.value;renderAdminRekapBulanan()">
+            ${MONTHS.map((mn,i)=>`<option value="${i+1}" ${i+1===m?'selected':''}>${mn}</option>`).join('')}
+          </select>
+        </div>
+        <div><label>Tahun</label>
+          <input type="number" value="${y}" onchange="document.getElementById('adminTab-rekap-bulanan').dataset.year=this.value;renderAdminRekapBulanan()">
+        </div>
+      </div>
+      <div class="small" style="margin-top:8px">A = Alpa · H = Hadir di luar hari tugas · L = Libur · S = Sakit · I = Izin</div>
+      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="downloadMonthlyPDF()">⬇ Download PDF</button>
+      <div class="table-scroll" style="margin-top:10px">
+        <table class="recap-table">
+          <thead>
+            <tr>
+              <th class="col-name">Guru</th>
+              ${dayCols.map(d=>`<th>${d}</th>`).join('')}
+              <th>Hadir%</th><th>Hadir</th><th>A</th><th>S</th><th>I</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.length ? data.map(r=>`
+              <tr>
+                <td class="col-name"><strong>${esc(r.nama)}</strong></td>
+                ${r.cells.map(c=>`<td class="${c.cls}">${c.text}</td>`).join('')}
+                <td class="cell-h">${r.pct}%</td>
+                <td>${r.hadir}</td>
+                <td class="cell-a">${r.alpa}</td>
+                <td class="cell-s">${r.sakit}</td>
+                <td class="cell-i">${r.izin}</td>
+              </tr>`).join('') : `<tr><td colspan="${dayCols.length+6}" class="empty">Belum ada guru.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function buildMonthlyRecap(year, month){
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const now = new Date();
+  const isCurrent = (year===now.getFullYear() && month===now.getMonth()+1);
+  const todayD = now.getDate();
+  const rows = [];
+  Object.entries(S.users).forEach(([uid,u])=>{
+    if (u.role!=='guru') return;
+    const dutyDays = u.dutyDays || [];
+    const cells = [];
+    let hadir=0, alpa=0, sakit=0, izin=0, dutyTotal=0;
+    for (let d=1; d<=daysInMonth; d++){
+      const dateStr = `${year}-${pad(month)}-${pad(d)}`;
+      const date = new Date(year, month-1, d);
+      const dow = date.getDay();
+      const off = isHoliday(dateStr, dow, S.config);
+      const isDuty = dutyDays.includes(dow);
+      const att = (S.attendance[dateStr]||{})[uid];
+      const isPast = !isCurrent || d <= todayD;
+
+      if (off){ cells.push({ text:'L', cls:'cell-l' }); continue; }
+      if (!isDuty){
+        if (att && att.type==='hadir') cells.push({ text:'H', cls:'cell-h2' });
+        else cells.push({ text:'' });
+        continue;
+      }
+      // hari tugas & bukan libur
+      if (!isPast){ cells.push({ text:'' }); continue; }
+      dutyTotal++;
+      if (att){
+        if (att.type==='hadir'){ cells.push({ text:att.time, cls:'cell-h' }); hadir++; }
+        else if (att.type==='sakit'){ cells.push({ text:'S', cls:'cell-s' }); sakit++; }
+        else if (att.type==='izin'){ cells.push({ text:'I', cls:'cell-i' }); izin++; }
+      } else {
+        cells.push({ text:'A', cls:'cell-a' }); alpa++;
+      }
+    }
+    const pct = dutyTotal>0 ? ((hadir/dutyTotal)*100).toFixed(1) : '0.0';
+    rows.push({ uid, nama:u.nama, cells, hadir, alpa, sakit, izin, dutyTotal, pct });
+  });
+  rows.sort((a,b)=>a.nama.localeCompare(b.nama));
+  return rows;
+}
+
+function downloadMonthlyPDF(){
+  const el = document.getElementById('adminTab-rekap-bulanan');
+  const y = +el.dataset.year;
+  const m = +el.dataset.month;
+  const data = buildMonthlyRecap(y, m);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+  doc.setFontSize(11);
+  doc.text(`Rekap Absensi Bulanan - ${MONTHS[m-1]} ${y}`, 10, 10);
+  doc.setFontSize(8);
+  doc.text('Absensi Guru Mugada | A=Alpa, H=Hadir luar tugas, L=Libur, S=Sakit, I=Izin', 10, 15);
+  const head = [['Guru', ...Array.from({length:daysInMonth},(_,i)=>String(i+1)), 'Hadir%','Hadir','A','S','I']];
+  const body = data.map(r=>[
+    r.nama, ...r.cells.map(c=>c.text), r.pct+'%', r.hadir, r.alpa, r.sakit, r.izin
+  ]);
+  doc.autoTable({
+    head, body,
+    startY: 20,
+    styles:{ fontSize:4.5, cellPadding:0.5, overflow:'linebreak' },
+    headStyles:{ fillColor:[30,58,138], fontSize:4.5 },
+    columnStyles:{ 0:{ cellWidth:22, fontStyle:'bold' } },
+    margin:{ left:3, right:3 }
+  });
+  doc.save(`Rekap_Bulanan_${MONTHS[m-1]}_${y}.pdf`);
+}
+
+/* --- Pengaturan --- */
+function renderAdminPengaturan(){
+  const el = document.getElementById('adminTab-pengaturan');
+  const c = S.config;
+  el.innerHTML = `
+    <div class="card">
+      <h2>Logo Aplikasi</h2>
+      <label>URL Logo (gambar)</label>
+      <input type="url" id="setLogo" value="${esc(c.logo||'')}" placeholder="https://...">
+      <div style="margin-top:8px" class="small">Pratinjau:</div>
+      <img src="${esc(c.logo||'')}" style="max-height:60px;margin-top:4px;${c.logo?'':'display:none'}" alt="">
+      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="saveLogo()">Simpan Logo</button>
+    </div>
+    <div class="card">
+      <h2>Batas Jam Absen</h2>
+      <label>Jam ditutup</label>
+      <input type="time" id="setClose" value="${esc(c.closeTime||'08:00')}">
+      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="saveCloseTime()">Simpan</button>
+      <div class="small" style="margin-top:6px">Setelah jam ini, tombol absen guru terkunci.</div>
+    </div>
+    <div class="card">
+      <h2>Lokasi & Radius Absensi</h2>
+      <div class="form-row">
+        <div><label>Latitude</label><input type="number" step="any" id="setLat" value="${c.lat||''}"></div>
+        <div><label>Longitude</label><input type="number" step="any" id="setLng" value="${c.lng||''}"></div>
+      </div>
+      <label>Radius (meter)</label>
+      <input type="number" id="setRadius" value="${c.radius||100}">
+      <button class="btn btn-secondary btn-block" style="margin-top:10px" onclick="useMyLocation()">📍 Gunakan Lokasi Saya</button>
+      <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="saveLocation()">Simpan Lokasi</button>
+      <div id="locStatus" class="small" style="margin-top:6px"></div>
+    </div>`;
+}
+function saveLogo(){ db.ref('config/logo').set(document.getElementById('setLogo').value.trim()); }
+function saveCloseTime(){ db.ref('config/closeTime').set(document.getElementById('setClose').value); }
+function useMyLocation(){
+  const st = document.getElementById('locStatus');
+  st.textContent = 'Mendeteksi...';
+  navigator.geolocation.getCurrentPosition(p=>{
+    document.getElementById('setLat').value = p.coords.latitude.toFixed(6);
+    document.getElementById('setLng').value = p.coords.longitude.toFixed(6);
+    st.textContent = 'Lokasi terisi. Klik Simpan Lokasi.';
+  }, err=>{ st.textContent = 'Gagal: '+err.message; }, { enableHighAccuracy:true });
+}
+function saveLocation(){
+  const lat = parseFloat(document.getElementById('setLat').value);
+  const lng = parseFloat(document.getElementById('setLng').value);
+  const radius = parseInt(document.getElementById('setRadius').value)||100;
+  if (isNaN(lat)||isNaN(lng)){ alert('Latitude/Longitude tidak valid'); return; }
+  db.ref('config').update({ lat, lng, radius });
+}
+
+/* ==================== INIT ==================== */
+window.addEventListener('load', ()=>{
+  // small delay agar listener users pertama kali sudah terisi
+  setTimeout(()=>{
+    restoreSession();
+    rerender();
+  }, 800);
+  showScreen('dashboard');
+});
+</script>
+</body>
+</html>
